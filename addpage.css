@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    background-color: #e1e1e1;
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+    background-image: url("download.jpeg"); 
+    image-resolution: 90dpi;
+    image-rendering: auto;
+    height: 100vh; 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+}
+h1 ,h2 {
+    font-weight: bold;
+}
+
+form {
+    background-color: rgba(29, 161, 242, 0.8);
+    padding:70px 30px;
+    border-radius: 4px;
+    color: white;
+}
+body img {
+    height: 100px;
+    width: 100px;
+    position: relative;
+    margin-bottom: -50px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
