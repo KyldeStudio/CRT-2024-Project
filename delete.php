@@ -9,6 +9,6 @@ if(isset($_GET["id"])){
     $conn->query($sql);
 }
 
-header("location:/IT05,ELEC7/index.php");
+header("location:/IT05,ELEC7/home.php");
 exit;
 ?>

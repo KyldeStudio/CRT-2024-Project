@@ -62,16 +62,27 @@ h2 {
 
 
 
-
-.logbtn {
-    position: absolute;
-    left: 20px;
-    top: 20px;
+.add-btn {
     padding: 15px 30px;
     margin-bottom: 10px;
     border-radius: 5px;
-    background-color: #0000ff;
+    background-color: #fff;
     border: #0000ff solid 1px;
+    color: #0000ff;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+
+}
+
+.logbtn {
+    padding: 15px 30px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #ff0000;
+    border: #ff0000 solid 1px;
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
@@ -81,6 +92,16 @@ h2 {
 
 }
 
+.add-btn:hover {
+    border: solid 1px #000099;
+    background-color: #eaeaea; 
+    transform: scale(1.05); 
+}
+.add-btn:active {
+    border: solid 1px #000066;
+    background-color: #eaeaea; 
+    transform: scale(0.95);
+}
 .div1{
     display: flex;
     flex-direction: column;
@@ -106,7 +127,47 @@ h2 {
     align-items: center;
     margin-bottom: 10px;
 }
+#logoutModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            z-index: 1000;
+        }
 
+        #modalBackdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .modal-button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .yes-button {
+            background-color: #336edd;
+            color: white;
+        }
+
+        .no-button {
+            background-color: #f44336;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -116,16 +177,17 @@ h2 {
         
         
         <div style="display: flex;
-        justify-content: center;
+        flex-direction: row;
+        justify-content: space-between;
         align-items: center;
         width: 100%;
         ">
+        <button class="add-btn" onclick="addBtn()">ADD</button>
 
         <!-- Search Form -->
         <form action="" method="POST" style="display: flex; gap: 10px;">
             <input type="text" name="search" id="" placeholder="Search"
-            style="
-            padding:15px;
+            style="padding:15px;
             width:500px;
             margin-bottom:10px;
             border-radius: 3px;
@@ -152,14 +214,31 @@ h2 {
     "><img src="search.png" alt="" style='width: 25px; height: 25px; padding: 0 5px;'></button>
         </form>
 
-        <!-- Back-->
-    <a onclick="logbtn()" class="logbtn" href="index.php" style="text-decoration: none; display:flex; justify-content:center; align-items: center; gap:10px"><img src="back.png" alt="" style="height: 30px; width:30px;"> BACK</a>
+        <!-- Logout Link -->
+    <button onclick="logbtn()" class="logbtn" id="logoutButton">LOGOUT</button>
         </div>
 
+        <div id="modalBackdrop"></div>
+    <div id="logoutModal">
+        <p>Are you sure you want to logout?</p>
+        <button class="modal-button yes-button" id="yesButton">Yes</button>
+        <button class="modal-button no-button" id="noButton">No</button>
+    </div>
+
+    <!-- Delete Modal -->
+
+    <div class="delete-modal" id="deleteModal" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); border-radius: 8px; z-index: 1000; display:none;
+        ">
+        <p>Are you sure you want to delete this record?</p>
+        <button class="modal-button yes-button" id="yesDeleteButton">Yes</button>
+        <button class="modal-button no-button" id="noDeleteButton">No</button>
+
+    </div>
 
         <!-- Table -->
         <table>
             <thead>
+                <th>Actions</th>
                 <th>No.</th>
                 <th>Name</th>
                 <th>Section</th>
@@ -204,7 +283,15 @@ h2 {
             // Calculate weighted average
             $average = ($prelim * 0.3) + ($midterm * 0.3) + ($finals * 0.4);
 
-            echo "
+            echo "<tr>
+                    <td>
+                        <a href='/IT05,ELEC7/update.php?id={$row['id']}' style='text-decoration:none;'>
+                            <img src='edit.png' alt='Edit' style='width: 25px; height: 25px; padding: 0 5px;'>
+                        </a>
+                        <a href='/IT05,ELEC7/delete.php?id={$row['id']}' style='text-decoration:none;'>
+                            <img src='bin.png' alt='Delete' style='width: 25px; height: 25px; padding: 0 5px;'>
+                        </a>
+                    </td>
                     <td>{$row['id']}</td>
                     <td>{$row['name']}</td>
                     <td>{$row['section']}</td>
@@ -228,6 +315,54 @@ h2 {
         </table>
     </div>
 
+    <script>
+        function addBtn() {
+            window.location.href = "add.php";
+        }
+        const logoutButton = document.getElementById("logoutButton");
+        const logoutModal = document.getElementById("logoutModal");
+        const modalBackdrop = document.getElementById("modalBackdrop");
+        const yesButton = document.getElementById("yesButton");
+        const noButton = document.getElementById("noButton");
+        
 
+        logoutButton.addEventListener("click", () => {
+            logoutModal.style.display = "block";
+            modalBackdrop.style.display = "block";
+        });
+        
+        yesButton.addEventListener("click", () => {
+
+            window.location.href = "index.php";
+            closeModal();
+        });
+        
+
+        noButton.addEventListener("click", closeModal);
+        
+ 
+        function closeModal() {
+            logoutModal.style.display = "none";
+            modalBackdrop.style.display = "none";
+        }
+        const deleteModal = document.getElementById("deleteModal");
+        const yesDeleteButton = document.getElementById("yesDeleteButton");
+        const noDeleteButton = document.getElementById("noDeleteButton");
+        const deleteLinks = document.querySelectorAll("a[href*='delete.php']");
+        deleteLinks.forEach(link => {
+            link.addEventListener("click", (event) => {
+                event.preventDefault(); // Prevent the default link behavior
+                deleteModal.style.display = "block";
+                modalBackdrop.style.display = "block";
+                const deleteUrl = link.getAttribute("href");
+
+                yesDeleteButton.onclick = function() {
+                    window.location.href = deleteUrl; // Redirect to the delete URL
+                };
+            });
+        });
+
+
+    </script>
 </body>
 </html>

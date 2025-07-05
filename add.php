@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $successMessage = "Student added successfully!";
         
 
-        header("Location: /IT05,ELEC7/index.php");
+        header("Location: /IT05,ELEC7/home.php");
         exit;
 
     } while (false);
